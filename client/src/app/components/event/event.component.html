@@ -1,0 +1,27 @@
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title" *ngIf="event">{{event.name}}</h5>
+    <div class="w-75 mx-auto mt-5 mb-3">
+      <div class="w-75 mx-auto mt-5 mb-3">
+        <h5 class="card-title" *ngIf="event && participants">Participants ({{participants.length}})</h5>
+        <div class="row mb-5 mt-5">
+          <div class="col-8">
+            <input #newParticipant type="text" class="form-control" placeholder="Add participant">
+          </div>
+          <div class="col-4">
+            <button class="btn btn-success" (click)="addParticipant(newParticipant)"><i class="fas fa-plus"></i> Add participant</button>
+          </div>
+        </div>
+        <div class="list-group">
+          <li class="list-group-item" *ngFor="let participant of participants; let idx = index;">
+              <button class="btn btn-sm btn-danger mr-3" (click)="deleteParticipant(idx)"><i class="fas fa-trash"></i></button>
+              <div class="d-inline font-weight-bold">
+                {{participant}}
+              </div>
+          </li>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--div class="card-footer"></div-->
+</div>

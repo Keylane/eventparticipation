@@ -1,7 +1,7 @@
 let eventIdSequence = 3;
 let eventsStub = [
-  { id: 1, name: 'Sommerfest'},
-  { id: 2, name: 'Julefrokost'}
+  { id: 1, name: 'Sommerfest 2018'},
+  { id: 2, name: 'Julefrokost 2017'}
 ];
 let participantsStub = [
   { eventId: 1, participants: ["Anders Helmar", "Christian Hessenbruch", "Tim Dettloff", "Rasmus Nørgaard"] },
