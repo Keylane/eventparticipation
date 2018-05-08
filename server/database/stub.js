@@ -25,9 +25,9 @@ function findEvent(eventId) {
 
 function findParticipants(eventId) {
   for (var i = 0; i < participantsStub.length; i++) {
-		var participantList = participantsStub[i];
-		if (eventId == participantList.eventId) {
-			return participantList.participants;
+		var participantObj = participantsStub[i];
+		if (eventId == participantObj.eventId) {
+			return participantObj;
 		}
 	}
 	return null;
@@ -35,15 +35,17 @@ function findParticipants(eventId) {
 
 function addEvent(eventName) {
   let newEvent = {id: eventIdSequence, name: eventName};
+  let newParticipantEntry = { eventId: eventIdSequence, participants: [] }
   eventIdSequence++;
   eventsStub.push(newEvent);
+  participantsStub.push(newParticipantEntry);
   return newEvent;
 }
 
 function addParticipant(eventId, participantName) {
-  var participantList = findParticipants(eventId);
-  if (participantList != null) {
-      participantList.push(participantName);
+  var participantObj = findParticipants(eventId);
+  if (participantObj != null) {
+    participantObj.participants.push(participantName);
   }
 }
 
