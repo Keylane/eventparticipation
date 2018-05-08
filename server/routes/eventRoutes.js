@@ -1,36 +1,12 @@
-var express = require('express');
-var router = express.Router({
-  mergeParams: true
-});
-const events = require('../data/data').events;
-const participants = require('../data/data').participants;
-
-function findEvent(eventId) {
-	for (var i = 0; i < events.length; i++) {
-		var event = events[i];
-		if (eventId == event.id) {
-			return event;
-		}
-	}
-	return null;
-}
-
-function findParticipants(eventId) {
-	for (var i = 0; i < participants.length; i++) {
-		var participantList = participants[i];
-		if (eventId == participantList.eventId) {
-			return participantList;
-		}
-	}
-	return null;
-}
+const router = require('express').Router({mergeParams: true});
+const db = require('../logics/persistenceManager');
 
 router.get('/', (req, res, next) => {
-	res.json(events);
+	res.json(db.findAllEvents());
 });
 
 router.get('/:eventId', (req, res, next) => {
-	var event = findEvent(req.params.eventId);
+  var event = db.findEvent(req.params.eventId);
 	if (event == null) {
 		res.json({});
 	} else {
@@ -39,12 +15,22 @@ router.get('/:eventId', (req, res, next) => {
 });
 
 router.get('/:eventId/participants', (req, res, next) => {
-	var participantList = findParticipants(req.params.eventId);
+	var participantList = db.findParticipants(req.params.eventId);
 	if (participantList == null) {
 		res.json({});
 	} else {
 		res.json(participantList);
 	}
+});
+
+router.post('/create', (req, res, next) => {
+  var newEvent = db.addEvent(req.body.name);
+  res.json({ id: newEvent.id });
+});
+
+router.post('/:eventId/addParticipant', (req, res, next) => {
+  db.addParticipant(req.params.eventId, req.body.name);
+  res.json({});
 });
 
 module.exports = router;
