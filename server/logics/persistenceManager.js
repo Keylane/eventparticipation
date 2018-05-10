@@ -44,8 +44,11 @@ function addEvent(name) {
 }
 
 function addParticipant(eventId, participantName) {
-  console.log("AddParticipant: " + eventId + ", " + participantName);
   getPersistenceUnit().addParticipant(eventId, participantName);
+}
+
+function updateParticipants(eventId, participantList) {
+  getPersistenceUnit().updateParticipants(eventId, participantList);
 }
 
 module.exports = {
@@ -53,5 +56,6 @@ module.exports = {
   findEvent,
   findParticipants,
   addEvent,
-  addParticipant
+  addParticipant,
+  updateParticipants
 }

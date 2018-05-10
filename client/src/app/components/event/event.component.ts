@@ -17,18 +17,54 @@ export class EventComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private router: Router, private eventService: EventService) { }
 
-  deleteParticipant(index: number) {
+  fileChanged($event):void {
+		let file = (<HTMLInputElement>document.getElementById("file")).files[0];
+		//new fileReader
+		var fileReader = new FileReader();
+		fileReader.readAsText(file);
+		//try to read file, this part does not work at all, need a solution
+		fileReader.onload = function(event) {
+      let content: string = (<FileReader>event.target).result
+      let lines: string[] = content.split("\n");
+      let acceptedParticipants: Set<string> = new Set();
+      for (var i = 1; i < lines.length; i++) {
+        let line: string = lines[i];
+        let lineContent: string[] = line.split("\t");
+        if (lineContent.length != 3) {
+          console.log("WRONG FORMAT IN LINE " + i);
+          continue;
+        }
+        let participantName: string = lineContent[0];
+        let participantAnswer: string = encodeURI(lineContent[2]);
+        if (participantAnswer == "Accepted%0D" || participantAnswer == "Accepteret%0D") {
+          acceptedParticipants.add(participantName);
+        }
+      }
+      console.log(acceptedParticipants);
+		}
+	}
+
+  deleteParticipant(index: number) : void {
     this.participants.splice(index, 1);
   }
-
-  addParticipant(inputObj: string) {
+  
+  addParticipant(inputObj: any) : void {
     let name: string = inputObj.value;
     if (name == null || name === "") {
       return;
     }
-    this.participants.push(name);
+    let newParticipant: Participant = {
+      name: name
+    }
+    this.participants.push(newParticipant);
     this.sortParticipants();
     inputObj.value = "";
+  }
+
+  save(): void {
+    this.eventService.saveParticipants(this.id, this.participants).subscribe((response) => {
+      this.loadParticipants();
+    });
   }
 
   ngOnInit() {
@@ -37,17 +73,21 @@ export class EventComponent implements OnInit {
       this.eventService.getEvent(this.id).subscribe((response) => {
         this.event = response;
       });
-      this.eventService.getParticipants(this.id).subscribe((response) => {
-        this.participants = response.participants;
-        this.sortParticipants();
-      });
+      this.loadParticipants();
+    });
+  }
+
+  loadParticipants(): void {
+    this.eventService.getParticipants(this.id).subscribe((response) => {
+      this.participants = response.participants;
+      this.sortParticipants();
     });
   }
 
   sortParticipants() {
     this.participants.sort((a, b) => {
-      if (a < b) return -1;
-      else if (a > b) return 1;
+      if (a.name < b.name) return -1;
+      else if (a.name > b.name) return 1;
       else return 0;
     });
   }

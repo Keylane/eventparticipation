@@ -4,8 +4,8 @@ let eventsStub = [
   { id: 2, name: 'Julefrokost 2017'}
 ];
 let participantsStub = [
-  { eventId: 1, participants: ["Anders Helmar", "Christian Hessenbruch", "Tim Dettloff", "Rasmus Nørgaard"] },
-  { eventId: 2, participants: ["Jesper Essendrop", "Rasmus Nørgaard"] }
+  { eventId: 1, participants: [{name: "Anders Helmar"}, {name: "Christian Hessenbruch"}, {name: "Tim Dettloff"}, {name: "Rasmus Nørgaard"}] },
+  { eventId: 2, participants: [{name: "Jesper Essendrop"}, {name: "Rasmus Nørgaard"}] }
 ];
 
 function findAllEvents() {
@@ -45,7 +45,14 @@ function addEvent(eventName) {
 function addParticipant(eventId, participantName) {
   var participantObj = findParticipants(eventId);
   if (participantObj != null) {
-    participantObj.participants.push(participantName);
+    participantObj.participants.push({name: participantName});
+  }
+}
+
+function updateParticipants(eventId, participantList) {
+  var participantObj = findParticipants(eventId);
+  if (participantObj != null) {
+    participantObj.participants = participantList;
   }
 }
 
@@ -54,5 +61,6 @@ module.exports = {
   findEvent,
   findParticipants,
   addEvent,
-  addParticipant
+  addParticipant,
+  updateParticipants
 }

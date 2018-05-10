@@ -33,4 +33,9 @@ router.post('/:eventId/addParticipant', (req, res, next) => {
   res.json({});
 });
 
+router.post('/:eventId/updateParticipants', (req, res, next) => {
+	db.updateParticipants(req.params.eventId, req.body.participants);
+  res.json({});
+});
+
 module.exports = router;
