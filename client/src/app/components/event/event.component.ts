@@ -23,42 +23,54 @@ export class EventComponent implements OnInit {
 		var fileReader = new FileReader();
 		fileReader.readAsText(file);
 		//try to read file, this part does not work at all, need a solution
-		fileReader.onload = function(event) {
-      let content: string = (<FileReader>event.target).result
-      let lines: string[] = content.split("\n");
-      let acceptedParticipants: Set<string> = new Set();
-      for (var i = 1; i < lines.length; i++) {
-        let line: string = lines[i];
-        let lineContent: string[] = line.split("\t");
-        if (lineContent.length != 3) {
-          console.log("WRONG FORMAT IN LINE " + i);
-          continue;
-        }
-        let participantName: string = lineContent[0];
-        let participantAnswer: string = encodeURI(lineContent[2]);
-        if (participantAnswer == "Accepted%0D" || participantAnswer == "Accepteret%0D") {
-          acceptedParticipants.add(participantName);
-        }
-      }
-      console.log(acceptedParticipants);
-		}
+    fileReader.onload = (e) => {
+      this.onLoad(e);
+    }
 	}
+
+  onLoad(event: any) {
+    let content: string = (<FileReader>event.target).result
+    let lines: string[] = content.split("\n");
+    let acceptedParticipants: Set<string> = new Set();
+    for (var i = 1; i < lines.length; i++) {
+      let line: string = lines[i];
+      let lineContent: string[] = line.split("\t");
+      if (lineContent.length != 3) {
+        console.log("WRONG FORMAT IN LINE " + i);
+        continue;
+      }
+      let participantName: string = lineContent[0];
+      let participantAnswer: string = encodeURI(lineContent[2]);
+      if (participantAnswer == "Accepted%0D" || participantAnswer == "Accepteret%0D") {
+        acceptedParticipants.add(participantName);
+      }
+    }
+    for (let participant of this.participants) {
+      acceptedParticipants.add(participant.name);
+    }
+    this.participants = new Array();
+    for (let name of Array.from(acceptedParticipants.values())) {
+      this.participants.push(this.buildParticipantObject(name));
+    }
+    this.sortParticipants();
+  }
 
   deleteParticipant(index: number) : void {
     this.participants.splice(index, 1);
   }
-  
+
   addParticipant(inputObj: any) : void {
     let name: string = inputObj.value;
     if (name == null || name === "") {
       return;
     }
-    let newParticipant: Participant = {
-      name: name
-    }
-    this.participants.push(newParticipant);
+    this.participants.push(this.buildParticipantObject(name));
     this.sortParticipants();
     inputObj.value = "";
+  }
+
+  buildParticipantObject(name: string): Participant {
+    return { name: name } as Participant;
   }
 
   save(): void {
