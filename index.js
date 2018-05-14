@@ -8,21 +8,11 @@ process.env.NODE_ENV = require('./server/utils/environmentUtils').ENV.DEV; // Co
 // Initialize the application
 const app = express();
 
-var whitelist = ['http://localhost:3000', 'http://localhost:4200']
-var corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
-  }
-}
 
-app.use(cors(corsOptions));
+app.use(cors({ origin: ['http://localhost:4200', 'http://localhost:3000'] }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.static(__dirname + '/client/dist/'));
+app.use(express.static(__dirname + '/client/dist/client'));
 app.use(require('./server/routes/routes'));
 
 app.get('*', (req, res) => {
