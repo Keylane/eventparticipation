@@ -15,9 +15,9 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + '/client/dist/client'));
 app.use(require('./server/routes/routes'));
 
-app.get('*', (req, res) => {
-	res.sendFile(path.join(__dirname + '/client/dist/client/index.html'));
-});
+// app.get('*', (req, res) => {
+// 	res.sendFile(path.join(__dirname + '/client/dist/client/index.html'));
+// });
 
 const config = require('./server/config/config').getConfig();
 console.log("Using config for " + config.env);

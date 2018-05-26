@@ -18,11 +18,10 @@ export class EventComponent implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router, private eventService: EventService) { }
 
   fileChanged($event):void {
-		let file = (<HTMLInputElement>document.getElementById("file")).files[0];
+		let file = (<HTMLInputElement>document.getElementById("inputFile")).files[0];
 		//new fileReader
 		var fileReader = new FileReader();
 		fileReader.readAsText(file);
-		//try to read file, this part does not work at all, need a solution
     fileReader.onload = (e) => {
       this.onLoad(e);
     }
@@ -53,6 +52,10 @@ export class EventComponent implements OnInit {
       this.participants.push(this.buildParticipantObject(name));
     }
     this.sortParticipants();
+  }
+
+  chooseFile(): void {
+    document.getElementById('inputFile').click();
   }
 
   deleteParticipant(index: number) : void {
