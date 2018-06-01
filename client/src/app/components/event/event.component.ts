@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { EventService } from '../../services/event.service';
-import { Event, Participant } from '../../interfaces/event';
+import { Event, Participant, ParticipationStatus } from '../../interfaces/event';
 
 @Component({
   selector: 'app-event',
@@ -12,22 +12,30 @@ import { Event, Participant } from '../../interfaces/event';
 export class EventComponent implements OnInit {
   private routeSubscription: any;
   private id: any;
-  private event: Event;
-  private participants: Participant[];
+  public event: Event;
+  public participants: Participant[];
+  private file: File;
+  public includeTentative: boolean = false;
+  public includeNoAnswer: boolean = false;
+  public includeDeclined: boolean = false;
 
   constructor(private route: ActivatedRoute, private router: Router, private eventService: EventService) { }
 
   fileChanged($event):void {
-		let file = (<HTMLInputElement>document.getElementById("inputFile")).files[0];
-		//new fileReader
-		var fileReader = new FileReader();
-		fileReader.readAsText(file);
-    fileReader.onload = (e) => {
-      this.onLoad(e);
-    }
+		this.file = (<HTMLInputElement>document.getElementById("inputFile")).files[0];
+    this.setFileNameFieldValue(this.file.name);
 	}
 
-  onLoad(event: any) {
+  loadOutlookExportFile() {
+    if (!this.file) return;
+    var fileReader = new FileReader();
+		fileReader.readAsText(this.file);
+    fileReader.onload = (e) => {
+      this.parseOutlookExportFile(e);
+    }
+  }
+
+  parseOutlookExportFile(event: any) {
     let content: string = (<FileReader>event.target).result
     let lines: string[] = content.split("\n");
     let acceptedParticipants: Set<string> = new Set();
@@ -39,19 +47,56 @@ export class EventComponent implements OnInit {
         continue;
       }
       let participantName: string = lineContent[0];
-      let participantAnswer: string = encodeURI(lineContent[2]);
-      if (participantAnswer == "Accepted%0D" || participantAnswer == "Accepteret%0D") {
-        acceptedParticipants.add(participantName);
+      let participantStatus: ParticipationStatus = this.getParticipantStatus(encodeURI(lineContent[2]))
+      if (participantStatus === ParticipationStatus.Accepted) {
+        this.addOrUpdateParticipant(participantName, participantStatus);
+      } else {
+        if (this.includeNoAnswer && participantStatus === ParticipationStatus.NoAnswer) {
+          this.addOrUpdateParticipant(participantName, participantStatus);
+        }
+        if (this.includeDeclined && participantStatus === ParticipationStatus.Declined) {
+          this.addOrUpdateParticipant(participantName, participantStatus);
+        }
+        if (this.includeTentative && participantStatus === ParticipationStatus.Tentative) {
+          this.addOrUpdateParticipant(participantName, participantStatus);
+        }
       }
     }
-    for (let participant of this.participants) {
-      acceptedParticipants.add(participant.name);
-    }
-    this.participants = new Array();
-    for (let name of Array.from(acceptedParticipants.values())) {
-      this.participants.push(this.buildParticipantObject(name));
-    }
     this.sortParticipants();
+    // Reset fields for file
+    this.file = null;
+    (<HTMLInputElement>document.getElementById("inputFile")).value = null;
+    this.setFileNameFieldValue("");
+  }
+
+  addOrUpdateParticipant(participantName: string, participantStatus: ParticipationStatus): void {
+    let existingParticipant: Participant = this.participants.find(participant => participant.name === participantName);
+    if (existingParticipant) {
+      existingParticipant.status = participantStatus;
+    } else {
+      this.participants.push(this.buildParticipantObject(participantName, participantStatus))
+    }
+  }
+
+  getParticipantStatus(answer: string): ParticipationStatus {
+    // console.log(answer);
+    if (answer == "Accepted%0D" || answer == "Accepteret%0D") {
+      return ParticipationStatus.Accepted;
+    }
+    if (answer == "None%0D" || answer == "Ingen%0D") {
+      return ParticipationStatus.NoAnswer;
+    }
+    if (answer == "Declined%0D" || answer == "Afsl%C3%A5et%0D") {
+      return ParticipationStatus.Declined;
+    }
+    if (answer == "Tentative%0D" || answer == "Forel%C3%B8big%0D") {
+      return ParticipationStatus.Tentative;
+    }
+    return ParticipationStatus.Unknown;
+  }
+
+  setFileNameFieldValue(value: string): void {
+    (<HTMLInputElement>document.getElementById("fileNameField")).value = value;
   }
 
   chooseFile(): void {
@@ -67,13 +112,13 @@ export class EventComponent implements OnInit {
     if (name == null || name === "") {
       return;
     }
-    this.participants.push(this.buildParticipantObject(name));
+    this.participants.push(this.buildParticipantObject(name, ParticipationStatus.Accepted));
     this.sortParticipants();
     inputObj.value = "";
   }
 
-  buildParticipantObject(name: string): Participant {
-    return { name: name } as Participant;
+  buildParticipantObject(name: string, status: ParticipationStatus): Participant {
+    return { name: name, status: status } as Participant;
   }
 
   save(): void {

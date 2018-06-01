@@ -8,12 +8,4 @@ Anders Nielsen Helmar	Optional Attendee	Accepted
 Anders Jørgensen	Optional Attendee	Accepted
 Christian Frost	Optional Attendee	Accepted
 Mette Sønderskov	Optional Attendee	Declined
-Alex Tingkær	Mødearrangør	Ingen
-Rasmus Nørgaard	Valgfri deltager	Accepteret
-Lau Maack-Krommes	Valgfri deltager	Ingen
-Christian Hessenbruch	Valgfri deltager	Accepteret
-Allan Beck	Valgfri deltager	Accepteret
-Anders Nielsen Helmar	Valgfri deltager	Accepteret
-Anders Jørgensen	Valgfri deltager	Accepteret
-Christian Frost	Valgfri deltager	Accepteret
-Mette Sønderskov	Valgfri deltager	Afslået
+Tim Dettloff	Optional Attendee	Tentative

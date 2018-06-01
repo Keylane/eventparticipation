@@ -9,6 +9,15 @@
   text-align: center;
 }
 
+.clickable:hover {
+  cursor: pointer;
+   transition: 0.4s all;
+  -webkit-transition: 0.4s all;
+  -moz-transition: 0.4s all;
+  -o-transition: 0.4s all;
+  transform: scale(1.1);
+}
+
 .card-body {
 
 }

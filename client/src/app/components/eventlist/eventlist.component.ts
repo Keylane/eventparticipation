@@ -13,9 +13,11 @@ export class EventlistComponent implements OnInit {
   constructor(private eventService: EventService) { }
 
   addEvent(eventObj : any) : void {
-    this.eventService.createEvent(eventObj.value).subscribe((response) => {
-      this.loadEvents();
-    });
+    if (String(eventObj.value).length > 0) {
+      this.eventService.createEvent(eventObj.value).subscribe((response) => {
+        this.loadEvents();
+      });
+    }
   }
 
   loadEvents(): void {

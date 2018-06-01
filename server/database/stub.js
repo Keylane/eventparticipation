@@ -1,15 +1,15 @@
+var statusEnum = require("../logics/enums").participationStatus;
+
 let eventIdSequence = 3;
 let eventsStub = [
-  { id: 1, name: 'Sommerfest 2018'},
-  { id: 2, name: 'Julefrokost 2017'}
+  { id: 1, name: 'Sommerfest 2018'}
 ];
 let participantsStub = [
-  { eventId: 1, participants: [{name: "Anders Helmar"}, {name: "Christian Hessenbruch"}, {name: "Tim Dettloff"}, {name: "Rasmus Nørgaard"}] },
-  { eventId: 2, participants: [{name: "Jesper Essendrop"}, {name: "Rasmus Nørgaard"}] }
+  { eventId: 1, participants: [{name: "Anders Helmar", status: statusEnum.Accepted}, {name: "Christian Hessenbruch", status: statusEnum.Accepted}, {name: "Tim Dettloff", status: statusEnum.Accepted}, {name: "Rasmus Nørgaard", status: statusEnum.Accepted}] }
 ];
 
 function findAllEvents() {
-  return eventsStub;
+  return eventsStub.reverse();
 }
 
 function findEvent(eventId) {
@@ -42,13 +42,6 @@ function addEvent(eventName) {
   return newEvent;
 }
 
-function addParticipant(eventId, participantName) {
-  var participantObj = findParticipants(eventId);
-  if (participantObj != null) {
-    participantObj.participants.push({name: participantName});
-  }
-}
-
 function updateParticipants(eventId, participantList) {
   var participantObj = findParticipants(eventId);
   if (participantObj != null) {
@@ -61,6 +54,5 @@ module.exports = {
   findEvent,
   findParticipants,
   addEvent,
-  addParticipant,
   updateParticipants
 }

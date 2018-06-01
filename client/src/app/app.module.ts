@@ -9,12 +9,15 @@ import { EventlistComponent } from './components/eventlist/eventlist.component';
 import { EventService } from './services/event.service';
 import { EventComponent } from './components/event/event.component';
 
+import { ParticipationStatusPipe } from './pipes/participation-status.pipe';
+
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     EventlistComponent,
-    EventComponent
+    EventComponent,
+    ParticipationStatusPipe
   ],
   imports: [
     BrowserModule,

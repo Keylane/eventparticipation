@@ -8,18 +8,46 @@
       <div class="row">
         <div class="col-sm">
           <div class="row mb-3 mt-5">
-            <div class="col-8">
-              <input #newParticipant type="text" class="form-control" placeholder="Add participant">
+            <div class="col-6">
+              <input #newParticipant type="text" class="form-control" placeholder="Participant name">
             </div>
-            <div class="col-4">
+            <div class="col-6">
               <button class="btn btn-success" (click)="addParticipant(newParticipant)"><i class="fas fa-plus"></i> Add participant</button>
             </div>
           </div>
-          <div class="row mb-3 mt-5">
-            <div class="col-12">
-              <button class="btn btn-primary" (click)="chooseFile()">Upload from outlook export</button>
-              <a><i class="ml-2 fas fa-question-circle"></i></a>
-              <input id="inputFile" type="file" (change)="fileChanged($event)" hidden>
+          <div class="mb-3 mt-5">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title">Upload participants from Outlook <a><i class="fas fa-question-circle clickable"></i></a></h5>
+              </div>
+              <div class="card-body">
+                <div class="col-12">
+                  <div class="row mb-3">
+                    <div class="col-6">
+                      <input id="fileNameField" type="text" class="form-control" disabled>
+                    </div>
+                    <div class="col-6">
+                      <button class="btn btn-primary" (click)="chooseFile()">Choose file</button>
+                    </div>
+                  </div>
+                  <input id="inputFile" type="file" (change)="fileChanged($event)" hidden>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="tentativeCheckBoxId" [checked]="includeTentative" (change)="includeTentative = $event.target.checked">
+                    <label class="form-check-label" for="defaultCheck1">Include tentative</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="noAnswerCheckBoxId" [checked]="includeNoAnswer" (change)="includeNoAnswer = $event.target.checked">
+                    <label class="form-check-label" for="defaultCheck1">Include no answer</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="rejectedCheckBoxId" [checked]="includeDeclined" (change)="includeDeclined = $event.target.checked">
+                    <label class="form-check-label" for="defaultCheck1">Include declined</label>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer text-center">
+                <button class="btn btn-primary" (click)="loadOutlookExportFile()">Upload</button>
+              </div>
             </div>
           </div>
         </div>
@@ -29,38 +57,12 @@
             <li class="list-group-item" *ngFor="let participant of participants; let idx = index;">
               <button class="btn btn-sm btn-danger mr-3" (click)="deleteParticipant(idx)"><i class="fas fa-trash"></i></button>
               <div class="d-inline font-weight-bold">
-                {{participant.name}}
+                {{participant.name}} ({{participant.status | participationStatus}})
               </div>
             </li>
           </div>
         </div>
       </div>
-      <!-- <div class="w-75 mx-auto mt-5 mb-3">
-        <div class="row mb-3 mt-5">
-          <div class="col-8">
-            <input #newParticipant type="text" class="form-control" placeholder="Add participant">
-          </div>
-          <div class="col-4">
-            <button class="btn btn-success" (click)="addParticipant(newParticipant)"><i class="fas fa-plus"></i> Add participant</button>
-          </div>
-        </div>
-
-        <input id="file" type="file" (change)="fileChanged($event)">
-
-        <div class="row mb-3">
-          <button class="btn btn-primary mx-auto" (click)="save()">Save</button>
-        </div>
-
-        <h5 class="card-title" *ngIf="event && participants">Participants ({{participants.length}})</h5>
-        <div class="list-group">
-          <li class="list-group-item" *ngFor="let participant of participants; let idx = index;">
-              <button class="btn btn-sm btn-danger mr-3" (click)="deleteParticipant(idx)"><i class="fas fa-trash"></i></button>
-              <div class="d-inline font-weight-bold">
-                {{participant.name}}
-              </div>
-          </li>
-        </div>
-      </div> -->
     </div>
   </div>
   <!--div class="card-footer"></div-->
