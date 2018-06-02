@@ -4,6 +4,7 @@
   "description": "Module to maintain events and participants",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "cd client && ng build --prod",
     "runProd": "set NODE_ENV=production&& set PORT=8080&& nodemon index.js",
