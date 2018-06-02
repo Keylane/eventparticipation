@@ -1,7 +1,7 @@
 var ENV = {
-  PROD: 'prod',
+  PROD: 'production',
   TEST: 'test',
-  DEV: 'dev'
+  DEV: 'development'
 }
 
 function isRunningTest() {

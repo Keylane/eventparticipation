@@ -1,8 +1,8 @@
 var statusEnum = require("../logics/enums").participationStatus;
 
-let eventIdSequence = 3;
+let eventIdSequence = 2;
 let eventsStub = [
-  { id: 1, name: 'Sommerfest 2018'}
+  { _id: 1, name: 'Sommerfest 2018'}
 ];
 let participantsStub = [
   { eventId: 1, participants: [{name: "Anders Helmar", status: statusEnum.Accepted}, {name: "Christian Hessenbruch", status: statusEnum.Accepted}, {name: "Tim Dettloff", status: statusEnum.Accepted}, {name: "Rasmus Nørgaard", status: statusEnum.Accepted}] }
@@ -16,7 +16,7 @@ function findEvent(eventId) {
   var events = findAllEvents();
 	for (var i = 0; i < events.length; i++) {
 		var event = events[i];
-		if (eventId == event.id) {
+		if (eventId == event._id) {
 			return event;
 		}
 	}
@@ -27,14 +27,14 @@ function findParticipants(eventId) {
   for (var i = 0; i < participantsStub.length; i++) {
 		var participantObj = participantsStub[i];
 		if (eventId == participantObj.eventId) {
-			return participantObj;
+			return participantObj.participants;
 		}
 	}
 	return null;
 }
 
 function addEvent(eventName) {
-  let newEvent = {id: eventIdSequence, name: eventName};
+  let newEvent = {_id: eventIdSequence, name: eventName};
   let newParticipantEntry = { eventId: eventIdSequence, participants: [] }
   eventIdSequence++;
   eventsStub.push(newEvent);
@@ -43,8 +43,10 @@ function addEvent(eventName) {
 }
 
 function updateParticipants(eventId, participantList) {
+  console.log(participantList)
   var participantObj = findParticipants(eventId);
   if (participantObj != null) {
+    console.log("FOUND!!");
     participantObj.participants = participantList;
   }
 }

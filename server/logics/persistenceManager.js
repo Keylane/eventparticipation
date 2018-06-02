@@ -27,28 +27,28 @@ function getPersistenceUnit() {
   }
 }
 
-function findAllEvents() {
-  return getPersistenceUnit().findAllEvents();
+async function findAllEvents() {
+  return await getPersistenceUnit().findAllEvents();
 }
 
-function findEvent(eventId) {
-  return getPersistenceUnit().findEvent(eventId);
+async function findEvent(eventId) {
+  return await getPersistenceUnit().findEvent(eventId);
 }
 
-function findParticipants(eventId) {
-  return getPersistenceUnit().findParticipants(eventId);
+async function findParticipants(eventId) {
+  return await getPersistenceUnit().findParticipants(eventId);
 }
 
-function addEvent(name) {
-  return getPersistenceUnit().addEvent(name);
+async function addEvent(name) {
+  return await getPersistenceUnit().addEvent(name);
 }
 
-function addParticipant(eventId, participantName) {
-  getPersistenceUnit().addParticipant(eventId, participantName);
+async function addParticipant(eventId, participantName) {
+  await getPersistenceUnit().addParticipant(eventId, participantName);
 }
 
-function updateParticipants(eventId, participantList) {
-  getPersistenceUnit().updateParticipants(eventId, participantList);
+async function updateParticipants(eventId, participantList) {
+  await getPersistenceUnit().updateParticipants(eventId, participantList);
 }
 
 module.exports = {

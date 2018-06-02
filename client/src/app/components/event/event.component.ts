@@ -139,7 +139,7 @@ export class EventComponent implements OnInit {
 
   loadParticipants(): void {
     this.eventService.getParticipants(this.id).subscribe((response) => {
-      this.participants = response.participants;
+      this.participants = response;
       this.sortParticipants();
     });
   }
