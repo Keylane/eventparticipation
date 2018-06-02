@@ -6,7 +6,7 @@ function getConfig() {
 			env: 'production',
 			uri: 'mongodb://localhost:27017/eventparticipation_prod',
 			dbName: 'eventparticipation_prod',
-			dbType: 'mongodb', // change to 'mongodb' to get it to work with mongo
+			dbType: 'stub', // change to 'mongodb' to get it to work with mongo
 			port: process.env.PORT || 3000
 		};
 	} else if (envUtil.isRunningTest()) {
