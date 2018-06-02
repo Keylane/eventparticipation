@@ -23,13 +23,19 @@ function findEvent(eventId) {
 	return null;
 }
 
-function findParticipants(eventId) {
+function findParticipantObj(eventId) {
   for (var i = 0; i < participantsStub.length; i++) {
 		var participantObj = participantsStub[i];
 		if (eventId == participantObj.eventId) {
-			return participantObj.participants;
+			return participantObj;
 		}
 	}
+	return null;
+}
+
+function findParticipants(eventId) {
+  var participantObj = findParticipantObj(eventId);
+  if (participantObj) return participantObj.participants;
 	return null;
 }
 
@@ -43,10 +49,8 @@ function addEvent(eventName) {
 }
 
 function updateParticipants(eventId, participantList) {
-  console.log(participantList)
-  var participantObj = findParticipants(eventId);
-  if (participantObj != null) {
-    console.log("FOUND!!");
+  var participantObj = findParticipantObj(eventId);
+  if (participantObj) {
     participantObj.participants = participantList;
   }
 }

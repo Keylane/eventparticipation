@@ -27,7 +27,7 @@ router.get('/:eventId/participants', mw.asyncRoute(async (req, res, next) => {
 
 router.post('/create', mw.asyncRoute(async (req, res, next) => {
   var newEvent = await db.addEvent(req.body.name);
-  res.json({ id: newEvent.id });
+  res.json({ id: newEvent._id });
 }));
 
 router.post('/:eventId/addParticipant', mw.asyncRoute(async (req, res, next) => {
