@@ -95,6 +95,12 @@ export class EventComponent implements OnInit {
     return ParticipationStatus.Unknown;
   }
 
+  newParticipantDownEvent(event: any, participantObj: any) : void {
+    if(event.keyCode == 13) { // Enter
+      this.addParticipant(participantObj);
+    }
+  }
+
   setFileNameFieldValue(value: string): void {
     (<HTMLInputElement>document.getElementById("fileNameField")).value = value;
   }
@@ -117,8 +123,17 @@ export class EventComponent implements OnInit {
     inputObj.value = "";
   }
 
+  participantMatchFilter(participant: Participant, filterString: string) : boolean {
+    if (!filterString || filterString == "") return true;
+    return participant.name.toLowerCase().indexOf(filterString.toLowerCase()) !== -1;
+  }
+
   buildParticipantObject(name: string, status: ParticipationStatus): Participant {
     return { name: name, status: status } as Participant;
+  }
+
+  filterChanged(filterString: string) : void {
+    // console.log("FILTER: " + filterString);
   }
 
   save(): void {
