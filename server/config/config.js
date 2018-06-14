@@ -4,9 +4,10 @@ function getConfig() {
 	if (envUtil.isRunningProd()) {
 		return {
 			env: 'production',
-			uri: 'mongodb://localhost:27017/eventparticipation_prod',
+			uri: 'mongodb://keylane_admin:keylaneAdmin1@ds247330.mlab.com:47330/keylane_events',
+			//uri: 'mongodb://localhost:27017/eventparticipation_prod',
 			dbName: 'eventparticipation_prod',
-			dbType: 'stub', // change to 'mongodb' and change uri to get it to work with mongo
+			dbType: 'mongodb', // change to 'mongodb' and change uri to get it to work with mongo
 			port: process.env.PORT || 3000
 		};
 	} else if (envUtil.isRunningTest()) {
