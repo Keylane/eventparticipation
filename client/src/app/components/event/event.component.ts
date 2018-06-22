@@ -159,6 +159,10 @@ export class EventComponent implements OnInit {
     });
   }
 
+  removeAllParticipants(): void {
+    this.participants = [];
+  }
+
   sortParticipants() {
     this.participants.sort((a, b) => {
       if (a.name < b.name) return -1;

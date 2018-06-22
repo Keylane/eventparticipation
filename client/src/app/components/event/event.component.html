@@ -59,6 +59,11 @@
               </div>
             </div>
           </div>
+          <div class="row mb-3 mt-5">
+            <div class="col-6">
+              <button class="btn btn-danger" (click)="removeAllParticipants()"><i class="fas fa-trash"></i> Remove all participants</button>
+            </div>
+          </div>
         </div>
         <div class="col-sm">
           <h5 class="card-title" *ngIf="event && participants">Participants ({{participants.length}})</h5>
